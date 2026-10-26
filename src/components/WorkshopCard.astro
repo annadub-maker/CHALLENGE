@@ -15,6 +15,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
       title="Learn more"
     />
     <Image class="image" src={workshop.data.image} alt="" />
+    <span class="secret" aria-hidden="true"><small>digit #1</small>2</span>
   </div>
 </article>
 
@@ -70,6 +71,87 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
     }
   }
 
+  /* hidden code digit #1: click an image 3 times */
+  .image {
+    cursor: crosshair;
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  .secret {
+    grid-area: img;
+    align-self: center;
+    justify-self: end;
+    width: min(15rem, 100%);
+    aspect-ratio: 1;
+    display: grid;
+    place-content: center;
+    text-align: center;
+
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 7rem;
+    font-weight: 800;
+    line-height: 1;
+    color: var(--color-primary);
+    text-shadow:
+      0 0 0.1em var(--color-primary),
+      0 0 0.4em var(--color-primary);
+    background-color: rgb(25 26 35 / 0.85);
+    border-radius: var(--br-l);
+
+    pointer-events: none;
+    visibility: hidden;
+    opacity: 0;
+
+    & small {
+      font-size: var(--fs--1);
+      font-weight: 400;
+      text-shadow: none;
+    }
+  }
+
+  .revealed .secret {
+    visibility: visible;
+    opacity: 1;
+    animation: glitch 0.5s steps(5);
+  }
+
+  .zap .image {
+    animation: glitch 0.35s steps(4);
+  }
+
+  @keyframes glitch {
+    0%,
+    100% {
+      translate: 0;
+      filter: none;
+      clip-path: none;
+    }
+    25% {
+      translate: -6px 0;
+      filter: drop-shadow(-4px 0 #ff2a6d) drop-shadow(4px 0 #05d9e8);
+      clip-path: inset(10% 0 50% 0);
+    }
+    50% {
+      translate: 5px 0;
+      filter: hue-rotate(90deg) drop-shadow(3px 0 #ff2a6d);
+      clip-path: inset(45% 0 5% 0);
+    }
+    75% {
+      translate: -2px 0;
+      filter: drop-shadow(2px 0 #05d9e8);
+      clip-path: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .revealed .secret,
+    .zap .image {
+      animation: none;
+    }
+  }
+
   .workshop-card--green {
     background-color: var(--color-primary);
   }
@@ -89,3 +171,30 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
     background-color: white;
   }
 </style>
+
+<script>
+  // hidden code digit #1: poke a workshop image 3 times
+  document.querySelectorAll(".workshop-card").forEach((card) => {
+    const image = card.querySelector(".image");
+    const secret = card.querySelector(".secret");
+    let clicks = 0;
+    let timer: ReturnType<typeof setTimeout>;
+
+    image?.addEventListener("click", () => {
+      clicks++;
+      card.classList.remove("zap");
+      void (card as HTMLElement).offsetWidth; // restart the glitch
+      card.classList.add("zap");
+      if (clicks < 3) return;
+
+      clicks = 0;
+      card.classList.add("revealed");
+      secret?.removeAttribute("aria-hidden");
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        card.classList.remove("revealed");
+        secret?.setAttribute("aria-hidden", "true");
+      }, 4000);
+    });
+  });
+</script>

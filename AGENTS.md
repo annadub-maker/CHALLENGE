@@ -2,13 +2,13 @@
 
 ## Project
 - Website for Creative Code Kortrijk (CCK), a new creative coding club in Kortrijk, Belgium.
-- Audience: people interested in creative coding who want to discover the club,
-  its workshops, its values and its team.
-- Built by a team of 3 students (Web 3 "Git Party"), each with their own agent,
+- Audience: people interested in creative coding who want to discover the club:
+  its workshops, the foundations it teaches, its team and its news.
+- Built by a team of 3 students (Web 3 "Git Party"), each with their own clone and agent,
   working in one GitHub repository with GitHub Flow (feature branches + pull requests).
 
 ## Stack & constraints
-- Astro v7 with TypeScript.
+- Astro v7 with TypeScript, static site.
 - Content is Markdown in Astro content collections, in `src/content/`:
   - `workshops`, `foundations`, `team` (each has an `img/` folder)
   - `news` (planned, not defined yet)
@@ -22,6 +22,7 @@
 - Layouts: `src/layouts/Base.astro` and `src/layouts/Markdown.astro`.
 - The starter code contains placeholders like `##WHAT-SHOULD-BE-HERE##` that must be
   replaced with real content or logic.
-- No CSS framework. Plain CSS in `src/styles/` (`reset.css`, `global.css`, `markdown.css`).
+- No CSS framework; styling is already provided in the starter. Plain CSS in
+  `src/styles/` (`reset.css`, `global.css`, `markdown.css`).
 - Local dev: `npm install`, then `npm run dev` (http://localhost:4321).
-- Deployment: GitHub Pages via a GitHub Actions workflow, triggered on changes to `main`.
+- Deployment: GitHub Pages via a GitHub Actions workflow on every push to `main`.

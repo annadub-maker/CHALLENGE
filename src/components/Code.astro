@@ -1,71 +1,99 @@
-<form action="http://youtu.be/oHg5SJYRHA0">
-  <input type="text" pattern="1" placeholder="0" required size="1" />
-  <input type="text" pattern="2" placeholder="0" required size="1" />
-  <input type="text" pattern="3" placeholder="0" required size="1" />
-  <input type="text" pattern="4" placeholder="0" required size="1" />
-  <button type="submit">git out</button>
+---
+// The correct code (2704) is checked with the `pattern` of each input.
+// The form has `novalidate` so the /code page can show its own
+// "access denied" glitch instead of the browser's error bubbles.
+---
+
+<form action="http://youtu.be/oHg5SJYRHA0" novalidate>
+  <input type="text" pattern="2" placeholder="0" required size="1" maxlength="1" inputmode="numeric" autocomplete="off" aria-label="Digit 1" />
+  <input type="text" pattern="7" placeholder="0" required size="1" maxlength="1" inputmode="numeric" autocomplete="off" aria-label="Digit 2" />
+  <input type="text" pattern="0" placeholder="0" required size="1" maxlength="1" inputmode="numeric" autocomplete="off" aria-label="Digit 3" />
+  <input type="text" pattern="4" placeholder="0" required size="1" maxlength="1" inputmode="numeric" autocomplete="off" aria-label="Digit 4" />
+  <button type="submit">sudo unlock</button>
 </form>
 
 <style>
-  :root {
-    --error: #ff0000;
-    --primary: #000000;
-    --primary-light: #c9c9c9;
+  form {
+    --glow: var(--color-primary);
+    --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(0.5rem, 2vw, 1rem);
+    font-family: var(--mono);
+    font-size: clamp(2.5rem, 1.5rem + 6vw, 4.5rem);
   }
 
   ::selection {
-    background-color: var(--primary);
-    color: white;
+    background-color: var(--glow);
+    color: var(--color-black);
   }
 
   input {
-    background: none;
-    border: none;
-    font-size: inherit;
-    font-family: inherit;
-    border-bottom: dashed 1px var(--primary);
+    width: 100%;
+    min-width: 0;
+    aspect-ratio: 3 / 4;
+    padding: 0;
+    background-color: #0b0c12;
+    color: var(--glow);
+    border: solid 2px color-mix(in srgb, var(--glow) 35%, transparent);
+    border-radius: var(--br-s);
+    font: inherit;
     text-align: center;
-  }
-
-  input:focus {
-    outline-color: var(--primary);
+    caret-color: var(--glow);
+    text-shadow:
+      0 0 0.15em var(--glow),
+      0 0 0.5em var(--glow);
+    transition:
+      border-color 0.2s ease,
+      box-shadow 0.2s ease;
   }
 
   input::placeholder {
-    color: var(--error);
+    color: color-mix(in srgb, var(--glow) 20%, transparent);
+    text-shadow: none;
   }
 
-  form {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    justify-content: center;
-    gap: 0.5em;
-    font-size: 3rem;
-    border: solid 2px var(--primary);
-    padding: 1rem;
-    background-color: var(--primary-light);
+  input:focus {
+    outline: none;
+    border-color: var(--glow);
+    box-shadow:
+      0 0 0 2px var(--glow),
+      0 0 1.5rem color-mix(in srgb, var(--glow) 50%, transparent);
+  }
+
+  input:disabled {
+    opacity: 1;
   }
 
   button {
     grid-column: 1 / -1;
-    background: var(--primary);
+    padding: 0.8em;
+    background-color: var(--glow);
+    color: var(--color-black);
     border: none;
-    color: white;
+    border-radius: var(--br-s);
     font-family: inherit;
-    font-size: inherit;
+    font-size: clamp(1rem, 0.9rem + 0.8vw, 1.3rem);
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: box-shadow 0.2s ease;
   }
 
-  button:focus {
-    outline: solid 1px var(--primary);
+  button::before {
+    content: "$ ";
+    opacity: 0.6;
   }
 
-  input:invalid {
-    color: var(--error);
-    border-color: var(--error);
+  button:is(:hover, :focus-visible) {
+    outline: none;
+    box-shadow: 0 0 1.5rem var(--glow);
   }
 
-  form:has(:invalid) button {
-    opacity: 0.1;
-    background-color: #ff0000;
+  @media (prefers-reduced-motion: reduce) {
+    input,
+    button {
+      transition: none;
+    }
   }
 </style>

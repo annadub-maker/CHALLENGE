@@ -1,8 +1,8 @@
 ---
-const { href, title } = Astro.props;
+const { href, title, class: className } = Astro.props;
 ---
 
-<a href={href} title={title} class="arrowlink">
+<a href={href} title={title} class:list={["arrowlink", className]}>
   <svg
     viewBox="-10 -10 40 40"
     fill="none"

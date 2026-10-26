@@ -1,0 +1,22 @@
+---
+import { Image } from "astro:assets";
+import { getCollection, render } from "astro:content";
+import Markdown from "../../layouts/Markdown.astro";
+
+export async function getStaticPaths() {
+  const workshops = await getCollection("workshops");
+  return workshops.map((workshop) => ({
+    params: { id: workshop.id },
+    props: { workshop },
+  }));
+}
+
+const { workshop } = Astro.props;
+const { Content } = await render(workshop);
+---
+
+<Markdown>
+  <h1 slot="top">{workshop.data.title}</h1>
+  <Content />
+  <Image slot="sidebar" src={workshop.data.image} alt="" width={300} />
+</Markdown>

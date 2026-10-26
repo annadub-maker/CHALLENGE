@@ -13,8 +13,11 @@ const items = await Promise.all(
 
 <Base title="News">
   <div class="container">
-    <h2><span>News</span></h2>
-    <p class="code">The third digit of the code is 3</p>
+    <!-- psst... real coders don't click, they type. try c-c-k (or tap "News" 3 times) -->
+    <h2><span class="news-title">News</span></h2>
+    <p class="code-terminal" hidden>
+      <span class="code-line">&gt; access granted: the fourth digit of the code is 4</span>
+    </p>
     <ul>
       {
         items.map(({ item, Content }) => (
@@ -50,4 +53,91 @@ const items = await Promise.all(
     display: block;
     margin-bottom: var(--sp-l);
   }
+
+  .code-terminal {
+    max-width: 100%;
+    background-color: var(--color-black);
+    color: var(--color-primary);
+    font-family: monospace;
+    padding: var(--sp-xs) var(--sp-s);
+    border-radius: var(--br-s);
+    margin-bottom: var(--sp-l);
+  }
+
+  .code-terminal:not([hidden]) {
+    display: inline-block;
+  }
+
+  .code-line {
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    max-width: 100%;
+    vertical-align: bottom;
+    border-right: solid 0.6em var(--color-primary);
+    animation:
+      typing 1.6s steps(51) forwards,
+      blink 0.8s step-end infinite;
+  }
+
+  @keyframes typing {
+    from {
+      width: 0;
+    }
+    to {
+      width: 51ch;
+    }
+  }
+
+  @keyframes blink {
+    50% {
+      border-color: transparent;
+    }
+  }
+
+  @media (max-width: 40rem) {
+    .code-line {
+      white-space: normal;
+      animation: blink 0.8s step-end infinite;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .code-line {
+      animation: none;
+    }
+  }
 </style>
+
+<script>
+  const secret = "cck";
+  const terminal = document.querySelector<HTMLElement>(".code-terminal");
+  const title = document.querySelector<HTMLElement>(".news-title");
+  let typed = "";
+  let taps = 0;
+  let tapTimer: number | undefined;
+
+  console.log(
+    "%c📰 Breaking news: a digit is hiding on this page. View the source for a tip.",
+    "color: #B9FF66; background: #191A23; padding: 4px 8px;",
+  );
+
+  const reveal = () => {
+    if (!terminal || !terminal.hidden) return;
+    terminal.hidden = false;
+    console.log("🎉 You cracked it! Digit 4 = 4");
+  };
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key.length !== 1) return;
+    typed = (typed + e.key.toLowerCase()).slice(-secret.length);
+    if (typed === secret) reveal();
+  });
+
+  title?.addEventListener("click", () => {
+    taps++;
+    clearTimeout(tapTimer);
+    tapTimer = window.setTimeout(() => (taps = 0), 800);
+    if (taps === 3) reveal();
+  });
+</script>

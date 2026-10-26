@@ -11,6 +11,7 @@ const foundations = await getCollection("foundations");
     <p>
       These foundations create an environment that encourages innovation,
       creativity, and personal growth.
+      <span class="whisper">Curious? Open every single one of them.</span>
     </p>
   </header>
   <ul>
@@ -21,6 +22,13 @@ const foundations = await getCollection("foundations");
         </li>
       ))
     }
+    <li class="secret" aria-live="polite">
+      <p>
+        <span class="secret-counter">00</span>
+        All foundations unlocked! The third digit of the code is
+        <strong>0</strong>.
+      </p>
+    </li>
   </ul>
 </section>
 
@@ -31,5 +39,59 @@ const foundations = await getCollection("foundations");
 
   ul {
     counter-reset: counter;
+  }
+
+  /* Hint: only readable when you select/highlight the text */
+  .whisper {
+    color: var(--color-background);
+  }
+
+  .whisper::selection {
+    background-color: var(--color-black);
+    color: var(--color-primary);
+  }
+
+  /* Secret card: only shows when every foundation is open */
+  .secret {
+    display: none;
+  }
+
+  #foundations:not(:has(:global(details:not([open])))) .secret {
+    display: block;
+    animation: unlock 0.6s ease-out;
+  }
+
+  .secret p {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--sp-m);
+    background-color: var(--color-black);
+    color: var(--color-primary);
+    padding: var(--sp-l);
+    border-radius: var(--br-l);
+    border: solid 2px var(--color-primary);
+    border-bottom-width: 8px;
+  }
+
+  .secret-counter {
+    font-size: var(--fs-3);
+  }
+
+  .secret strong {
+    font-size: var(--fs-3);
+  }
+
+  @keyframes unlock {
+    from {
+      opacity: 0;
+      transform: translateY(1rem) rotate(-2deg);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #foundations:not(:has(:global(details:not([open])))) .secret {
+      animation: none;
+    }
   }
 </style>
